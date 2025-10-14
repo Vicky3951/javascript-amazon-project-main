@@ -44,7 +44,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png" />
             Added
           </div>
@@ -58,14 +58,16 @@ products.forEach((product) => {
 
 document.querySelector(".js-product-grid").innerHTML = productsHTML;
 
+let addedMessageTimeouts = {};
+
 document.querySelectorAll(".js-add-to-cart-button").forEach((button) => {
   button.addEventListener("click", () => {
-    const productId = button.dataset.productId;
+    const { productId } = button.dataset;
 
     let selectQuantity = document.querySelector(
       `.js-quantity-selector-${productId}`
     );
-    quantityCount = Number(selectQuantity.value);
+    let quantity = Number(selectQuantity.value); //if we are not initialize using variable it will be consiter as global variable like(window.quantity)
 
     let matchingitem;
 
@@ -76,11 +78,11 @@ document.querySelectorAll(".js-add-to-cart-button").forEach((button) => {
     });
 
     if (matchingitem) {
-      matchingitem.quantity++;
+      matchingitem.quantity += quantity;
     } else {
       cart.push({
-        productId: productId,
-        quantity: quantityCount,
+        productId,
+        quantity,
       });
     }
 
@@ -90,6 +92,25 @@ document.querySelectorAll(".js-add-to-cart-button").forEach((button) => {
       cartQuantity += item.quantity;
     });
 
+    console.log(cart);
+
     document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+
+    const addedMessage = document.querySelector(
+      `.js-added-to-cart-${productId}`
+    );
+
+    addedMessage.style.opacity = 1;
+
+    if (addedMessageTimeouts[productId]) {
+      clearTimeout(addedMessageTimeouts[productId]);
+    }
+
+    const timeoutId = setTimeout(() => {
+      addedMessage.style.opacity = 0;
+      delete addedMessageTimeouts[productId];
+    }, 2000);
+
+    addedMessageTimeouts[productId] = timeoutId;
   });
 });
