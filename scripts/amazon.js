@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productsHTML = "";
@@ -61,59 +61,40 @@ products.forEach((product) => {
 
 document.querySelector(".js-product-grid").innerHTML = productsHTML;
 
+function updateCartQyantity(productId) {
+  let cartQuantity = 0;
+
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  console.log(cart);
+
+  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+
+  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+
+  addedMessage.style.opacity = 1;
+
+  if (addedMessageTimeouts[productId]) {
+    clearTimeout(addedMessageTimeouts[productId]);
+  }
+
+  const timeoutId = setTimeout(() => {
+    addedMessage.style.opacity = 0;
+    delete addedMessageTimeouts[productId];
+  }, 2000);
+
+  addedMessageTimeouts[productId] = timeoutId;
+}
 let addedMessageTimeouts = {};
 
+//click button and function starts
 document.querySelectorAll(".js-add-to-cart-button").forEach((button) => {
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
 
-    let selectQuantity = document.querySelector(
-      `.js-quantity-selector-${productId}`
-    );
-    let quantity = Number(selectQuantity.value); //if we are not initialize using variable it will be consiter as global variable like(window.quantity)
-
-    let matchingitem;
-
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingitem = item;
-      }
-    });
-
-    if (matchingitem) {
-      matchingitem.quantity += quantity;
-    } else {
-      cart.push({
-        productId,
-        quantity,
-      });
-    }
-
-    let cartQuantity = 0;
-
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-
-    console.log(cart);
-
-    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
-
-    const addedMessage = document.querySelector(
-      `.js-added-to-cart-${productId}`
-    );
-
-    addedMessage.style.opacity = 1;
-
-    if (addedMessageTimeouts[productId]) {
-      clearTimeout(addedMessageTimeouts[productId]);
-    }
-
-    const timeoutId = setTimeout(() => {
-      addedMessage.style.opacity = 0;
-      delete addedMessageTimeouts[productId];
-    }, 2000);
-
-    addedMessageTimeouts[productId] = timeoutId;
+    addToCart(productId);
+    updateCartQyantity(productId);
   });
 });
