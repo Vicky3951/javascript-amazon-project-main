@@ -10,6 +10,19 @@ export let cart = [
   },
 ];
 
+export function removeFromCart(productId)
+{
+  const newCart=[];
+
+  cart.forEach((cartItem)=>{
+    if(cartItem.productId !== productId)
+    {
+      newCart.push(cartItem);
+    }
+  })
+  cart=newCart;
+};
+
 // add to cart function for product.js
 export function addToCart(productId) {
   let selectQuantity = document.querySelector(
