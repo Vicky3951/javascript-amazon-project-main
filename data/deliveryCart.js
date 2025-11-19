@@ -29,10 +29,22 @@ export function getDeliveryOption(deliveryOptionId) {
   return deliveryOption;
 }
 
-export function calculateDeliveryDate(deliveryOption) {
-  const today = dayjs();
-  const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
-  const dateString = deliveryDate.format("dddd, MMMM D");
+function isWeekend(date) {
+  const dayOfWeek = date.format("dddd");
+  return dayOfWeek === "Sunday" || dayOfWeek === "Saturday";
+}
 
+export function calculateDeliveryDate(deliveryOption) {
+  let remainingDay = deliveryOption.deliveryDays;
+  let deliveryDate = dayjs();
+
+  while (remainingDay > 0) {
+    deliveryDate = deliveryDate.add(1, "day");
+
+    if (!isWeekend(deliveryDate)) {
+      remainingDay--;
+    }
+  }
+  let dateString = deliveryDate.format("dddd, MMM D");
   return dateString;
 }
