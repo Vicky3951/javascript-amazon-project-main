@@ -88,8 +88,12 @@ let addedMessageTimeouts = {};
 document.querySelectorAll(".js-add-to-cart-button").forEach((button) => {
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
+    let selectQuantity = document.querySelector(
+      `.js-quantity-selector-${productId}`
+    );
+    let quantity = Number(selectQuantity.value);
 
-    addToCart(productId);
+    addToCart(productId, quantity);
     updateCartQuantity(productId);
   });
 });

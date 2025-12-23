@@ -1,4 +1,9 @@
-import { cart, removeFromCart, updateDeliveryOption } from "../../data/cart.js"; //Named Export
+import {
+  cart,
+  removeFromCart,
+  updateDeliveryOption,
+  saveToStorage,
+} from "../../data/cart.js"; //Named Export
 import { formatCurrency } from "../utils/money.js";
 import {
   deliveryOptions,
@@ -119,6 +124,7 @@ export function renderOrderSummary() {
             cartItem.quantity;
 
           console.log("Updated quantity:", cartItem.quantity);
+          saveToStorage();
         }
       });
       input.value = "";
