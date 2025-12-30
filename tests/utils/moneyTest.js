@@ -11,4 +11,7 @@ describe("Test suite : formatCurrency", () => {
     expect(formatCurrency(2000.5)).toEqual("20.01");
     expect(formatCurrency(2000.4)).toEqual("20.00");
   });
+  it("works with negative numbers", () => {
+    expect(formatCurrency(-500)).toEqual("-5.00");
+  });
 });
