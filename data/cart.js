@@ -1,4 +1,5 @@
 import { products } from "../data/products.js";
+import { validDeliveryOption } from "./deliveryCart.js";
 
 export function getProduct(productId) {
   let matchingProduct;
@@ -91,7 +92,13 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
       matchingitem = cartItem;
     }
   });
+  if (!matchingitem) {
+    return;
+  }
 
+  if (!validDeliveryOption(deliveryOptionId)) {
+    return;
+  }
   matchingitem.deliveryOptionId = deliveryOptionId;
 
   saveToStorage();
