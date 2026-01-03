@@ -1,3 +1,6 @@
+import { products } from "../data/products.js";
+import { validDeliveryOption } from "./deliveryCart.js";
+
 function Cart(localStorageKey) {
   let cart = {
     cartItems: undefined,
