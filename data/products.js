@@ -21,6 +21,23 @@ class Product {
   getPrice() {
     return `$${formatCurrency(this.priceCents)}`;
   }
+
+  extraInfoHTML() {
+    return "";
+  }
+}
+class Clothing extends Product {
+  sizeChartLink;
+
+  constructor(ProductDetails) {
+    super(ProductDetails);
+    this.sizeChartLink = ProductDetails.sizeChartLink;
+  }
+
+  extraInfoHTML() {
+    return `
+    <a href='${this.sizeChartLink}' target="_blank">Size Chart</a>`;
+  } //Method Override
 }
 
 export const products = [
@@ -102,6 +119,8 @@ export const products = [
     },
     priceCents: 2400,
     keywords: ["hoodies", "sweaters", "apparel"],
+    type: "clothing",
+    sizeChartLink: "images/clothing-size-chart.png",
   },
   {
     id: "77919bbe-0e56-475b-adde-4f24dfed3a04",
@@ -493,6 +512,8 @@ export const products = [
     },
     priceCents: 2400,
     keywords: ["sweaters", "hoodies", "apparel", "mens"],
+    type: "clothing",
+    sizeChartLink: "images/clothing-size-chart.png",
   },
   {
     id: "id1",
@@ -517,5 +538,8 @@ export const products = [
     keywords: ["umbrella", "stylish", "unisex", "combact"],
   },
 ].map((ProductDetails) => {
+  if (ProductDetails.type === "clothing") {
+    return new Clothing(ProductDetails);
+  }
   return new Product(ProductDetails);
 });
